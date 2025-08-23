@@ -1,0 +1,38 @@
+global:
+  commonLabels:
+    app: backbone-appset
+    chart: backboneAppset
+    heritage: k3s-charts
+    release: backbone-appset
+  commonAnnotations: {}
+
+enabled: true
+appsetTargetRevision: HEAD
+
+argocd:
+  namespace: argocd
+  server: https://kubernetes.default.svc
+  project: argocd
+
+appset:
+  # Enable the application
+  enabled: true
+
+  applications:
+    - name: metallb
+      namespace: metallb-system
+      project: default
+      config:
+        targetRevision: HEAD
+        repoUrl: "your-git-repo.com"
+        path: "metallb-config.yaml"
+      helm:
+        targetRevision: "target revision"
+        type: "chart"
+        path: "metallb"
+    # Some other applications
+
+  clusters:
+    - name: local
+      url: https://kubernetes.default.svc
+    # Add more clusters as needed

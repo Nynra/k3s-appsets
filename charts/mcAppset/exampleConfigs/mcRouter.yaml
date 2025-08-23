@@ -1,0 +1,138 @@
+
+
+mc-router:
+  replicaCount: 1
+
+  deploymentAnnotations: {}
+  deploymentLabels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+
+  services:
+    # Service for API requests
+    api: {}
+      # type: ClusterIP
+      # # Service port exposed within the cluster
+      # port: 8080
+      # # Service port exposed externally on each node
+      # nodePort: 38080
+      # Service annotations
+      # annotations: {}
+
+    # Service for Minecraft client connections
+    minecraft:
+      type: NodePort
+      # Service port exposed within the cluster
+      port: 25565
+      # Service port exposed externally on each node
+      # nodePort: 30065
+      # Service annotations
+      # annotations: {}
+
+  resources: {}
+  # limits:
+  #   cpu: 250m
+  #   memory: 100Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 50Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  minecraftRouter:
+    autoScale:
+      up:
+        # "Wake up" any stopped Minecraft servers.
+        # This requires Minecraft servers to be kind: StatefulSet
+        enabled: false
+      down:
+        # Shut down any running Minecraft servers after there are no more connections.
+        # This requires Minecraft servers to be kind: StatefulSet
+        enabled: false
+        # Shut down waiting period after there are no more connections.
+        # It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown
+        after: ""
+      # Type of Kubernetes object to store autoscale allow/deny list config in.
+      # Valid options: Secret,ConfigMap
+      configObject: Secret
+      # Specify a server allow/deny list to restrict which players may trigger the scalers.
+      # For more info on the schema, check out the file in `mc-router`
+      # https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json
+      allowDeny: {}
+        # global:
+        #   denylist:
+        #   - uuid: some-player-uuid
+        #     name: somePlayerName
+        # servers:
+        #   my.server.domain:
+        #     allowlist:
+        #     - uuid: some-player-uuid
+        #   my.other-server.domain:
+        #     denylist:
+        #     - uuid: some-player-uuid
+
+    # Max number of connections to allow per second
+    connectionRateLimit: 1
+
+    # Write CPU profiling to given path
+    cpuProfilePath: ""
+
+    # Enable debug logs
+    debug:
+      enabled: false
+
+    # Default Minecraft server to use when mapping not found
+    defaultServer: {}
+      # host: ""
+      # port: 25565
+
+    # Minecraft server mappings
+    mappings: []
+      # - externalHostname: ""
+      #   host: ""
+      #   port: 25565
+
+    metrics:
+      # Backend to use for metrics exposure/publishing: discard,expvar,influxdb,prometheus
+      backend: discard
+
+      # InfluxDB settings. Required if backend is set to influxdb
+      # influxdb:
+      #   address: ""
+      #   database: ""
+      #   interval: 1m0s
+      #   credentials:
+      #     # The name of an existing secret containing the database credentials
+      #     existingSecret: ""
+      #     # The key in the existing secret containing the username
+      #     usernameKey: username
+      #     # The key in the existing secret containing the password
+      #     passwordKey: password
+      #   retentionPolicy: ""
+      #   # Extra tags to be included with all reported metrics
+      #   tags: ""
+
+    # If set, an ngrok tunnel will be established.
+    ngrokToken: {}
+      # # The name of an existing secret containing the token
+      # existingSecret: ""
+      # # The key in the existing secret containing the token
+      # tokenKey: token
+
+    # Simplify fully qualified SRV records for mapping
+    simplifySrv: false
+
+    # Send PROXY protocol to backend servers
+    useProxyProtocol: false
