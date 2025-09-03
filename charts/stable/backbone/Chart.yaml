@@ -1,0 +1,5 @@
+apiVersion: v2
+name: backbone-app
+description: A Helm chart that deploys the Backbone applications in a K3s cluster.
+type: application
+version: "0.0.1"

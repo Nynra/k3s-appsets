@@ -1,0 +1,57 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+  project: default
+
+  server: https://kubernetes.default.svc
+
+  config:
+    repoURL: https://example.com/repo.git
+    targetRevision: HEAD
+
+enabled: true
+
+argocd-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/argocd-values.yaml
+
+gatekeeper-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/gatekeeper-values.yaml
+
+metallb-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/metallb-values.yaml
+
+eks-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/eks-values.yaml
+
+certs-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/cert-manager-values.yaml
+
+storage-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/longhorn-values.yaml
+
+ingress-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/traefik-values.yaml
+
+auth-app:
+  enabled: false
+  targetRevision: HEAD
+  configPath: configs/authentik-values.yaml
+
+monitoring-app:
+  enabled: true
+  targetRevision: HEAD
+  configPath: configs/monitoring-values.yaml
