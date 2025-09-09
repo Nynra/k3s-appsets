@@ -1,0 +1,26 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+enabled: true
+
+# External secrets to retreive credentials
+externalSecrets:
+  enabled: true
+  secretStore: "kubernetes"
+  secretStoreType: "ClusterSecretStore"
+
+# Sync groups
+groups:
+  - id: "adguardhome-sync-group"
+    origin: 
+      name: "adguardhome-origin"
+      address: "http://adguardhome:3000"
+      secretName: "adguardhome-sync-secret"
+    replicas: 
+      - name: "adguardhome-replica"
+        address: "http://adguardhome-replica:3000"
+        secretName: "adguardhome-sync-replica-secret"
+      # More can be added here
+    config:
+      autoSetupReplicas: true
