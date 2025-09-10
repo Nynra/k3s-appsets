@@ -15,15 +15,13 @@ managementProject:
 # Argocd App Projects
 tenantProject:
   # Project the tenant resources will be deployed in
-  enabled: true
+  enabled: false
   name: k3s-test-project
   description: "Tenant project for k3s test"
 
   # Add a presync hook to the project
-  hookProject: true
-  hookNamespace: true
-
-  # description: "Tenant project for k3s test"
+  hookProject: false
+  hookNamespace: false
 
   # List of source repositories for this project
   sourceRepos: []
@@ -44,21 +42,22 @@ tenantProject:
   #     kind: "*"
 
   # List of namespace resource blacklists for this project
-  namespaceResourceBlacklist:
-    - group: "" 
-      kind: Namespace
+  namespaceResourceBlacklist: []
+    # - group: "" 
+    #   kind: Namespace
 
   # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
   namespaceResourceWhitelist: []
 
-  roles:
+  enableReadOnlyRole: false
+  roles: {}
     # A role which provides read-only access to all applications in the project
-    - name: read-only
-      description: Read-only privileges to {{ .Values.tenantProject.name }}
-      policies:
-      - p, proj:{{ .Values.tenantProject.name }}:read-only, applications, get, {{ .Values.tenantProject.name }}/*, allow
-      # groups:
-      # - my-oidc-group
+    # - name: read-only
+    #   description: Read-only privileges to {{ .Values.tenantProject.name }}
+    #   policies:
+    #   - p, proj:{{ .Values.tenantProject.name }}:read-only, applications, get, {{ .Values.tenantProject.name }}/*, allow
+    #   # groups:
+    #   # - my-oidc-group
 
     # # A role which provides sync privileges to only the guestbook-dev application, e.g. to provide
     # # sync privileges to a CI system
@@ -68,29 +67,29 @@ tenantProject:
     #   - p, proj:{{ .Values.tenantProject.name }}:ci-role, applications, sync, {{ .Values.tenantProject.name }}/guestbook-dev, allow
 
   # Sync windows restrict when Applications may be synced. https://argo-cd.readthedocs.io/en/stable/user-guide/sync_windows/
-  syncWindows: 
-  - kind: allow
-    schedule: '10 1 * * *'
-    duration: 1h
-    applications:
-      - '*-prod'
+  syncWindows: {}
+  # - kind: allow
+  #   schedule: '10 1 * * *'
+  #   duration: 1h
+  #   applications:
+  #     - '*-prod'
 
-limits:
-  enabled: true
-  # Specification of the limitRange resource
-  rules: |
-    limits:
-      - type: "Pod"
-        max:
-          cpu: 200m
-          memory: 256Mi
-      - type: "Container"
-        max:
-          cpu: 100m
-          memory: 128Mi
+# limits:
+#   enabled: true
+#   # Specification of the limitRange resource
+#   rules: |
+#     limits:
+#       - type: "Pod"
+#         max:
+#           cpu: 200m
+#           memory: 256Mi
+#       - type: "Container"
+#         max:
+#           cpu: 100m
+#           memory: 128Mi
 
 quota:
-  enabled: true
+  enabled: false
   # Specification of the quotas resource
   rules: |
     hard:
@@ -99,8 +98,8 @@ quota:
       requests.cpu: "400m"
       requests.memory: "512Mi"
       persistentvolumeclaims: "0"
-      pods: "4"
-      services: "2"
+      # pods: "4"
+      # services: "2"
 
 networkPolicy:
   enabled: false
@@ -137,94 +136,9 @@ networkPolicy:
         - podSelector: {}
 
 gitopsApplication:
-  enabled: true
+  enabled: false
   # Dont forget to add the gitops url to the allowed sources for the tenant project
   # is not all sources are allowed
   repoURL: "" 
   targetRevision: HEAD
   path: applications
-
-externalSecrets:
-  enabled: true
-
-  # List of certificates to create
-  certificates:
-    enabled: true
-    certificates:
-    # # Example external secret with all fields
-    - name: my-external-secret
-      remoteName: my-secret-name
-      storeName: kubernetes-secret-store
-    # # Example external secret with manditory fields only
-    - name: my-external-secret2
-      remoteName: my-secret-name2
-      # Secret store will be set to {{ .Values.tenantProject.name }}-cert-store
-  
-  # List of secrets to create
-  secrets:
-    enabled: true
-    secrets:
-    # Example external secret with all fields
-    - name: my-secret-secret
-      remoteName: my-external-secret-name
-      storeName: kubernetes-secret-store
-      fieldMappings:
-        # The field name in the remote secret
-        - remoteField: my_secret_field
-          # The secret key in the Kubernetes secret
-          secretKey: my_secret_key
-
-  # List of secret stores to create
-  # To be able to reconsile secrets from the stores either the cluster external secrets
-  # operator needs to reconsile in the tenant namespace (not recommended) or the tenant 
-  # project needs to deploy its own external secrets operator. This operator can be
-  # connected to the cluster connect server or tenant connect server. If the cluster 
-  # connect server is used the connect-tokens should be reflected from the cluster namespace
-  stores:
-    enabled: true
-    stores:
-    # List of secret stores to create
-    # By default, the chart will create a SecretStore with the name of the project
-    - name: "{{ .Values.tenantProject.name }}-cert-store"
-      enabled: true
-      # Best practice is to reflect the connect token from another namespace
-      # so the tenant does not have access to secret stores outside the tenant namespace
-      connectSecretName: "{{ .Values.tenantProject.name }}-cert-store-token"
-      # External vaults used to query secrets from
-      vaults:
-        - name: vault
-          piority: 10
-    - name: "{{ .Values.tenantProject.name }}-secret-store"
-      enabled: true
-      # Best practice is to reflect the connect token from another namespace
-      # so the tenant does not have access to secret stores outside the tenant namespace
-      connectSecretName: "{{ .Values.tenantProject.name }}-secret-store-token"
-      # External vaults used to query secrets from
-      vaults:
-        - name: vault
-          priority: 10
-
-  eksApplication:
-    enabled: true
-    # The name of the eks application
-    name: "{{ .Values.tenantProject.name }}-eks-app"
-    targetRevision: HEAD
-    enableServiceMonitor: true
-    allowPushSecret: true
-
-    # By default we expect to connect to the cluster connect server with a
-    # scoped token for the tenant vaults. When enabling tenant eks make sure the 
-    # cluster eks operator does not reconsile in the tenant namespace, otherwise
-    # the operators will work against each other in an endless loop.
-    operator:
-      enabled: true
-
-    # The tenant can deploy their own connect server to manager their own vaults
-    # and secrets. This gives the tenant the ability to manage their own secrets
-    # and vaults without having access to the cluster connect server.
-    connect:
-      enabled: true
-      # Attention, this chart assumes the credentials already exist in the tenant namespace
-      credentials:
-        name: "{{ .Values.tenantProject.name }}-connect-credentials"
-        key: connectTokenKey

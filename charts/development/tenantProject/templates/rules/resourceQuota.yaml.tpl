@@ -6,14 +6,14 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    # Global annotations
     {{- if .Values.global.commonAnnotations }}
+    # Global annotations
     {{- toYaml .Values.global.commonAnnotations | nindent 4 }}
     {{- end }}
   labels:
     tenancy.io/tenant: {{ .Values.tenantProject.name | quote }}
-    # Global labels
     {{- if .Values.global.commonLabels }}
+    # Global labels
     {{- toYaml .Values.global.commonLabels | nindent 4 }}
     {{- end }}
 spec: 
