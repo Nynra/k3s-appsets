@@ -1,0 +1,14 @@
+apiVersion: v2
+name: tenantProjectApp
+description: A Helm chart that deploys a tenant project application in a K3s cluster.
+type: application
+version: "0.0.1"
+dependencies:
+- name: connect
+  version: "2.0.0"
+  repository: https://1password.github.io/connect-helm-charts
+  condition: externalSecrets.eksApplication.connect.enabled && externalSecrets.eksApplication.enabled
+- name: external-secrets
+  version: "0.18.1"
+  repository: https://charts.external-secrets.io
+  condition: externalSecrets.eksApplication.operator.enabled && externalSecrets.eksApplication.enabled
