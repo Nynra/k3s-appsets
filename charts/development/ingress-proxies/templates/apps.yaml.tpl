@@ -36,20 +36,20 @@ spec:
           cert:
             {{ toYaml $.Values.cert | nindent 12 }}
         # DNS record for the backend service
-        dnsRecord:
-          enabled: {{ .backend.dns.enabled | default false }}
-          {{ if .backend.dns.ip }}
-          ip: {{ .backend.dns.ip | quote }}
-          {{ end }}
-          {{ if $.Values.defaults.backend.dns.labels }}
-          labels:
-            {{ toYaml $.Values.defaults.backend.dns.labels | nindent 14 }}
-          {{ end }}
-          {{ if .backend.dns.annotations }}
-          annotations:
-            {{ toYaml $.Values.defaults.backend.dns.annotations | nindent 14 }}
-          {{ end }}
-          recordTTL: {{ .backend.dns.ttl | default $.Values.defaults.backend.dns.ttl }}
+        # dnsRecord:
+        #   enabled: {{ .backend.dns.enabled | default false }}
+        #   {{ if .backend.dns.ip }}
+        #   ip: {{ .backend.dns.ip | quote }}
+        #   {{ end }}
+        #   {{ if $.Values.defaults.backend.dns.labels }}
+        #   labels:
+        #     {{ toYaml $.Values.defaults.backend.dns.labels | nindent 14 }}
+        #   {{ end }}
+        #   {{ if .backend.dns.annotations }}
+        #   annotations:
+        #     {{ toYaml $.Values.defaults.backend.dns.annotations | nindent 14 }}
+        #   {{ end }}
+        #   recordTTL: {{ .backend.dns.ttl | default $.Values.defaults.backend.dns.ttl }}
         # Parameters for the external server
         externalServer:
           tls:
