@@ -22,9 +22,7 @@ spec:
       values: |-
         global:
           {{ toYaml $.Values.global | nindent 10 }}
-
         enabled: true
-
         ingress:
           enabled: {{ .ingress.enabled | default $.Values.defaults.ingress.enabled | quote }} 
           url: {{ .ingress.url | quote }}
@@ -32,12 +30,11 @@ spec:
           middlewares:
             {{ if .ingress.middlewares }}
             {{ toYaml .ingress.middlewares | nindent 12 }}
-            {{ else if $.Values.defaults.ingress.middlewares }}
+            {{ else }}{{ if $.Values.defaults.ingress.middlewares }}
             {{ toYaml $.Values.defaults.ingress.middlewares | nindent 12 }}
-            {{ end }}
+            {{ end }}{{ end }}
           cert:
             {{ toYaml $.Values.cert | nindent 12 }}
-        
         # DNS record for the backend service
         dnsRecord:
           enabled: {{ .backend.dns.enabled | quote }}
@@ -53,7 +50,6 @@ spec:
             {{ toYaml $.Values.defaults.backend.dns.annotations | nindent 14 }}
           {{ end }}
           recordTTL: {{ .backend.dns.ttl | default $.Values.defaults.backend.dns.ttl }}
-
         # Parameters for the external server
         externalServer:
           tls:
