@@ -20,8 +20,8 @@ spec:
     path: charts/development/ingress-proxy
     helm:
       values: |
-        global:
-          {{ toYaml $.Values.global | nindent 10 }}
+        # global:
+        #   {{ toYaml $.Values.global | nindent 10 }}
         enabled: true
         ingress:
           enabled: {{ .ingress.enabled | default $.Values.defaults.ingress.enabled | quote }} 
