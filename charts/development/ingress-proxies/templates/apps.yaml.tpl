@@ -19,7 +19,7 @@ spec:
     targetRevision: HEAD
     path: charts/development/ingress-proxy
     helm:
-      values: |-
+      values: |
         global:
           {{ toYaml $.Values.global | nindent 10 }}
         enabled: true
