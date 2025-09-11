@@ -37,7 +37,7 @@ spec:
             {{ toYaml $.Values.cert | nindent 12 }}
         # DNS record for the backend service
         dnsRecord:
-          enabled: {{ .backend.dns.enabled | quote }}
+          enabled: {{ .backend.dns.enabled | default "false" | quote }}
           {{ if .backend.dns.ip }}
           ip: {{ .backend.dns.ip | quote }}
           {{ end }}
