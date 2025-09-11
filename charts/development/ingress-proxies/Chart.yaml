@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ingress-proxies
+description: A Helm chart that creates ingress routes to external servers.
+type: application
+version: "0.0.1"
+dependencies: []

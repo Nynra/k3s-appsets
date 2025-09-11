@@ -1,0 +1,82 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+
+argocd: 
+  # Namespace argocd is deployed in
+  namespace: argocd
+  server: https://kubernetes.default.svc
+  # The project the proxies will be deployed in
+  project: ingress-proxies
+
+cert:
+  # The certificate to use for the ingresses
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originSecretName: example-com-tls
+
+defaults:
+  # Some default values for the proxies, can be overridden per proxy
+  ingress:
+    enabled: false
+    entrypoint: websecure
+    middlewares:
+      - name: traefik-default-chain
+        namespace: traefik
+  backend: 
+    tls:
+      skipVerify: false
+    protocol: TCP
+    dns:
+      enabled: false
+      ttl: 180
+      annotations: {}
+      labels: {}
+
+proxies: []
+  # # Entry with all the parameters
+  # - name: whoami 
+  #   enabled: true
+  #   namespace: whoami
+  #   ingress: 
+  #     enabled: true 
+  #     url: "whoami.frontend.com"
+  #     entrypoint: websecure
+  #     middlewares:
+  #       - name: traefik-default-chain
+  #         namespace: traefik
+  #   backend:
+  #     # Connection details for the external server
+  #     url: "whoami.backend.com"
+  #     port: 80
+  #     protocol: TCP
+  #     # If tls should be enabled
+  #     tls:
+  #       enabled: false
+  #       skipVerify: false
+  #     # Optional dns entry for the backend server
+  #     dns: 
+  #       enabled: false
+  #       # This can also be a fqdn, externaldns will use a cname record then
+  #       ip: ""
+  #       ttl: 180
+  #       annotations: {}
+  #       labels: {}
+  # # Another entry with only the required parameters, other parameters will use the defaults
+  # - name: another-whoami
+  #   enabled: true
+  #   namespace: whoami
+  #   ingress:
+  #     url: "another-whoami.frontend.com"
+  #   backend:
+  #     # Connection details for the external server
+  #     url: "another-whoami.backend.com"
+  #     port: 80
+  #     # Optional dns entry for the backend server
+  #     dns:
+  #       ip: ""
+  #     tls:
+  #       enabled: false
