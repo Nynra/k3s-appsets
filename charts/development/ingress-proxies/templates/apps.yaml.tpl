@@ -41,7 +41,9 @@ spec:
         # DNS record for the backend service
         dnsRecord:
           enabled: {{ .backend.dns.enabled | quote }}
+          {{ if .backend.dns.ip }}
           ip: {{ .backend.dns.ip | quote }}
+          {{ end }}
           {{ if $.Values.defaults.backend.dns.labels }}
           labels:
             {{ toYaml $.Values.defaults.backend.dns.labels | nindent 14 }}
@@ -50,7 +52,7 @@ spec:
           annotations:
             {{ toYaml $.Values.defaults.backend.dns.annotations | nindent 14 }}
           {{ end }}
-          recordTTL: {{ .backend.dns.ttl | default $.Values.defaults.backend.dns.ttl | quote }}
+          recordTTL: {{ .backend.dns.ttl | default $.Values.defaults.backend.dns.ttl }}
 
         # Parameters for the external server
         externalServer:
