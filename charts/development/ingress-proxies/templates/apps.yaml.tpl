@@ -40,7 +40,7 @@ spec:
         
         # DNS record for the backend service
         dnsRecord:
-          enabled: {{ .backend.dns.enabled | default $.Values.defaults.backend.dns.enabled | quote }}
+          enabled: {{ .backend.dns.enabled | quote }}
           ip: {{ .backend.dns.ip | quote }}
           {{ if $.Values.defaults.backend.dns.labels }}
           labels:

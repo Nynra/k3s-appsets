@@ -21,7 +21,6 @@ cert:
 defaults:
   # Some default values for the proxies, can be overridden per proxy
   ingress:
-    enabled: false
     entrypoint: websecure
     middlewares:
       - name: traefik-default-chain
@@ -31,7 +30,6 @@ defaults:
       skipVerify: false
     protocol: TCP
     dns:
-      enabled: false
       ttl: 180
       annotations: {}
       labels: {}
@@ -70,6 +68,7 @@ proxies: []
   #   enabled: true
   #   namespace: whoami
   #   ingress:
+  #     enabled: true
   #     url: "another-whoami.frontend.com"
   #   backend:
   #     # Connection details for the external server
@@ -77,6 +76,7 @@ proxies: []
   #     port: 80
   #     # Optional dns entry for the backend server
   #     dns:
+  #       enabled: false
   #       ip: ""
   #     tls:
   #       enabled: false
