@@ -1,12 +1,3 @@
-global:
-  commonLabels: {}
-  commonAnnotations: {}
-
-  # For TrueCharts charts so it doesnt try to take 200Gi of storage
-  fallbackDefaults:
-    pvcSize: 1Gi
-    vctSize: 1Gi
-
 enabled: true 
 
 quota:
