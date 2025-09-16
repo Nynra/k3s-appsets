@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homarr-app
+  name: homarr-apps
   namespace: {{ .Values.argoCD.namespace | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
