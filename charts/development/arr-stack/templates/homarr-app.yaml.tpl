@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homarr-apps
+  name: homarr-app
   namespace: {{ .Values.argoCD.namespace | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -14,9 +14,9 @@ spec:
     server: https://kubernetes.default.svc
   project: {{ .Values.argoCD.project | quote }}
   source:
-    repoURL: https://github.com/Nynra/k3s-appsets
+    repoURL: https://github.com/Nynra/k3s-charts
     targetRevision: HEAD
-    path: charts/development/arr-stack
+    path: charts/development/homarr
     helm:
       values: |
         quota:
