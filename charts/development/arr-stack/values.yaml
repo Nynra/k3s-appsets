@@ -1,0 +1,38 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+  # For TrueCharts charts so it doesnt try to take 200Gi of storage
+  fallbackDefaults:
+    pvcSize: 1Gi
+    vctSize: 1Gi
+
+enabled: true 
+
+quota:
+  enabled: true
+
+networkPolicy:
+  enabled: true
+  traefikNamespace: traefik
+  traefikPodSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+      app.kubernetes.io/instance: traefik
+
+argoCD: 
+  namespace: argocd
+  project: infrastructure
+
+cert:
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originName: example-com-tls
+
+homarr: 
+  enabled: true
+  ingressUrl: homarr.example.com
+  middleware:
+    name: traefik-default-chain
+    namespace: traefik 
