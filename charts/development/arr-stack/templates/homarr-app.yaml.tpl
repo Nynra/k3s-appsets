@@ -37,9 +37,11 @@ spec:
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
   syncPolicy:
+    {{ if .Values.argoCD.autosync }}
     automated:
       prune: true
       selfHeal: true
+    {{ end }}
     syncOptions:
       - CreateNamespace=false
 {{ end }}{{ end }}
