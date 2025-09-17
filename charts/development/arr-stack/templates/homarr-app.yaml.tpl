@@ -36,6 +36,11 @@ spec:
               enabled: {{ .Values.cert.reflectedSecret.enabled }}
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
+        oidcClient:
+          reflectedSecret:
+            enabled: {{ .Values.homarr.oidcClient.reflectedSecret.enabled }}
+            originNamespace: {{ .Values.homarr.oidcClient.reflectedSecret.originNamespace | quote }}
+            originName: {{ .Values.homarr.oidcClient.reflectedSecret.originName | quote }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:

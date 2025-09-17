@@ -13,6 +13,7 @@ networkPolicy:
 
 argoCD: 
   namespace: argocd
+  autosync: true
   project: infrastructure
 
 cert:
