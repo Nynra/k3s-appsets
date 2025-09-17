@@ -28,3 +28,8 @@ homarr:
   middleware:
     name: traefik-default-chain
     namespace: traefik 
+  oidcClient:
+    reflectedSecret:
+      enabled: true
+      originNamespace: default
+      originName: auth-oidc-secret
