@@ -28,8 +28,24 @@ homarr:
   middleware:
     name: traefik-default-chain
     namespace: traefik 
+
+  # OIDC client credentials
   oidcClient:
     reflectedSecret:
       enabled: true
       originNamespace: default
       originName: auth-oidc-secret
+
+tautulli:
+  enabled: true
+  ingressUrl: tautulli.example.com
+  middleware:
+    name: traefik-default-chain
+    namespace: traefik
+
+jellyseerr:
+  enabled: true
+  ingressUrl: jellyseerr.example.com
+  middleware:
+    name: traefik-default-chain
+    namespace: traefik

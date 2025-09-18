@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homarr-app
+  name: jellyseerr-app
   namespace: {{ .Values.argoCD.namespace | quote }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,13 +10,13 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
-    namespace: {{ .Release.Namespace }}-homarr
+    namespace: {{ .Release.Namespace }}-jellyseerr
     server: https://kubernetes.default.svc
   project: {{ .Values.argoCD.project | quote }}
   source:
     repoURL: https://github.com/Nynra/k3s-charts
     targetRevision: HEAD
-    path: charts/development/homarr
+    path: charts/development/jellyseerr
     helm:
       values: |
         quota:
@@ -27,20 +27,15 @@ spec:
             traefikNamespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
             traefikPodSelector: {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 14 }}
         dashboard:
-          ingressUrl: {{ .Values.homarr.ingressUrl | quote }}
+          ingressUrl: {{ .Values.jellyseerr.ingressUrl | quote }}
           middlewares:
-            - name: {{ .Values.homarr.middleware.name | quote }}
-              namespace: {{ .Values.homarr.middleware.namespace | quote }}
+            - name: {{ .Values.jellyseerr.middleware.name | quote }}
+              namespace: {{ .Values.jellyseerr.middleware.namespace | quote }}
           cert:
             reflectedSecret:
               enabled: {{ .Values.cert.reflectedSecret.enabled }}
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
-        oidcClient:
-          reflectedSecret:
-            enabled: {{ .Values.homarr.oidcClient.reflectedSecret.enabled }}
-            originNamespace: {{ .Values.homarr.oidcClient.reflectedSecret.originNamespace | quote }}
-            originName: {{ .Values.homarr.oidcClient.reflectedSecret.originName | quote }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
