@@ -1,4 +1,4 @@
-{{ if .Values.enabled }}{{ if .Values.homarr.enabled}}
+{{ if .Values.enabled }}{{ if .Values.tautulli.enabled}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
