@@ -35,6 +35,11 @@ homarr:
       enabled: true
       originNamespace: default
       originName: auth-oidc-secret
+  dbCredentials:
+    reflectedSecret:
+      enabled: true
+      originNamespace: default
+      originName: homarr-db-secret
 
 tautulli:
   enabled: true

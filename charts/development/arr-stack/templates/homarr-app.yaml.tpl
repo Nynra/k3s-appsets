@@ -41,6 +41,11 @@ spec:
             enabled: {{ .Values.homarr.oidcClient.reflectedSecret.enabled }}
             originNamespace: {{ .Values.homarr.oidcClient.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.oidcClient.reflectedSecret.originName | quote }}
+        dbCredentials:
+          reflectedSecret:
+            enabled: {{ .Values.homarr.dbCredentials.reflectedSecret.enabled }}
+            originNamespace: {{ .Values.homarr.dbCredentials.reflectedSecret.originNamespace | quote }}
+            originName: {{ .Values.homarr.dbCredentials.reflectedSecret.originName | quote }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
