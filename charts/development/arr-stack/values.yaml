@@ -41,6 +41,13 @@ homarr:
       originNamespace: default
       originName: homarr-db-secret
 
+prowlarr:
+  enabled: true
+  ingressUrl: prowlarr.example.com
+  middleware:
+    name: traefik-default-chain
+    namespace: traefik
+
 tautulli:
   enabled: true
   ingressUrl: tautulli.example.com
