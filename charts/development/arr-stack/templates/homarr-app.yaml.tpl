@@ -1,4 +1,4 @@
-{{ if .Values.enabled }}{{ if .Values.homarr.enabled}}
+{{ if .Values.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -19,6 +19,7 @@ spec:
     path: charts/development/homarr
     helm:
       values: |
+        enabled: {{ .Values.homarr.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}
         networkPolicy:
@@ -54,4 +55,4 @@ spec:
     {{ end }}
     syncOptions:
       - CreateNamespace=false
-{{ end }}{{ end }}
+{{ end }}

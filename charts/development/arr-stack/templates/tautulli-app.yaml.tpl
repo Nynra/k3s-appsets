@@ -1,4 +1,4 @@
-{{ if .Values.enabled }}{{ if .Values.tautulli.enabled}}
+{{ if .Values.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -19,6 +19,7 @@ spec:
     path: charts/development/tautulli
     helm:
       values: |
+        enabled: {{ .Values.tautulli.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}
         networkPolicy:
@@ -44,4 +45,4 @@ spec:
     {{ end }}
     syncOptions:
       - CreateNamespace=false
-{{ end }}{{ end }}
+{{ end }}
