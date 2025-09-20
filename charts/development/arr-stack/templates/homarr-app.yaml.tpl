@@ -47,7 +47,7 @@ spec:
             originNamespace: {{ .Values.homarr.dbCredentials.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.dbCredentials.reflectedSecret.originName | quote }}
         homarr:
-          enabled: {{ .Values.homarr.enabled | quote }}
+          enabled: {{ .Values.homarr.enabled }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
