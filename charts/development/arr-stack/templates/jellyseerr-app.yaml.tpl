@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
-    namespace: {{ .Release.Namespace }}-jellyseerr
+    namespace: {{ .Release.Name }}-jellyseerr
     server: https://kubernetes.default.svc
   project: {{ .Values.argoCD.project | quote }}
   source:
@@ -18,7 +18,7 @@ spec:
     targetRevision: HEAD
     path: charts/development/jellyseerr
     helm:
-      values: |
+      valuesObject:
         enabled: {{ .Values.jellyseerr.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}

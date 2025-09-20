@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
-    namespace: {{ .Release.Namespace }}-homarr
+    namespace: {{ .Release.Name }}-homarr
     server: https://kubernetes.default.svc
   project: {{ .Values.argoCD.project | quote }}
   source:

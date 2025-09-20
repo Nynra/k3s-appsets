@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   destination:
-    namespace: {{ .Release.Namespace }}-tautulli
+    namespace: {{ .Release.Name }}-tautulli
     server: https://kubernetes.default.svc
   project: {{ .Values.argoCD.project | quote }}
   source:
@@ -18,7 +18,7 @@ spec:
     targetRevision: HEAD
     path: charts/development/tautulli
     helm:
-      values: |
+      valuesObject:
         enabled: {{ .Values.tautulli.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}
