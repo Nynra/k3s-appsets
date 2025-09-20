@@ -11,41 +11,45 @@ argocd:
   # The project the proxies will be deployed in
   project: ingress-proxies
 
+networkPolicy:
+  enabled: false
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
 cert:
   # The certificate to use for the ingresses
   reflectedSecret:
     enabled: true
     originNamespace: cert-manager
-    originSecretName: example-com-tls
+    originName: example-com-tls
 
 defaults:
   # Some default values for the proxies, can be overridden per proxy
   ingress:
     entrypoint: websecure
-    middlewares:
-      - name: traefik-default-chain
-        namespace: traefik
+    middleware:
+      name: traefik-default-chain
+      namespace: traefik
   backend: 
     tls:
       skipVerify: false
     protocol: TCP
-    dns:
-      ttl: 180
-      annotations: {}
-      labels: {}
 
 proxies: []
   # # Entry with all the parameters
   # - name: whoami 
   #   enabled: true
-  #   namespace: whoami
   #   ingress: 
   #     enabled: true 
   #     url: "whoami.frontend.com"
   #     entrypoint: websecure
-  #     middlewares:
-  #       - name: traefik-default-chain
-  #         namespace: traefik
+  #     middleware:
+  #       name: traefik-default-chain
+  #       namespace: traefik
   #   backend:
   #     # Connection details for the external server
   #     url: "whoami.backend.com"
@@ -55,28 +59,15 @@ proxies: []
   #     tls:
   #       enabled: false
   #       skipVerify: false
-  #     # Optional dns entry for the backend server
-  #     dns: 
-  #       enabled: false
-  #       # This can also be a fqdn, externaldns will use a cname record then
-  #       ip: ""
-  #       ttl: 180
-  #       annotations: {}
-  #       labels: {}
-  # # Another entry with only the required parameters, other parameters will use the defaults
-  # - name: another-whoami
+  # # # Another entry with only the required parameters, other parameters will use the defaults
+  # - name: another-whoami 
   #   enabled: true
-  #   namespace: whoami
-  #   ingress:
-  #     enabled: true
+  #   ingress: 
+  #     enabled: true 
   #     url: "another-whoami.frontend.com"
   #   backend:
-  #     # Connection details for the external server
   #     url: "another-whoami.backend.com"
   #     port: 80
-  #     # Optional dns entry for the backend server
-  #     dns:
-  #       enabled: false
-  #       ip: ""
   #     tls:
   #       enabled: false
+  #       skipVerify: false

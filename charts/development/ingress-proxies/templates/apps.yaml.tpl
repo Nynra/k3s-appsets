@@ -11,7 +11,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: {{ .namespace | quote }}
+    namespace: {{ .name }}-proxy
     server: {{ $.Values.argocd.server | quote }}
   project: {{ $.Values.argocd.project | quote }}
   source:
@@ -19,29 +19,38 @@ spec:
     targetRevision: HEAD
     path: charts/development/ingress-proxy
     helm:
-      values: |
-        enabled: true
+      valuesObject:
+        networkPolicy:
+          enabled: {{ $.Values.networkPolicy.enabled }}
+          ingress:
+            traefikNamespace: {{ $.Values.networkPolicy.ingress.traefikNamespace | quote }}
+            traefikPodSelector: {{ toYaml $.Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
         ingress:
-          enabled: {{ .ingress.enabled }} 
+          enabled: {{ .ingress.enabled | default true }}
           url: {{ .ingress.url | quote }}
           entrypoint: {{ .ingress.entrypoint | default $.Values.defaults.ingress.entrypoint | quote }}
-          middlewares:
-            {{ if .ingress.middlewares }}
-            {{ toYaml .ingress.middlewares | nindent 12 }}
-            {{ else }}{{ if $.Values.defaults.ingress.middlewares }}
-            {{ toYaml $.Values.defaults.ingress.middlewares | nindent 12 }}
-            {{ end }}{{ end }}
+          {{ if .middleware }}
+          middlewares: 
+            - name: {{ .ingress.middleware.name | quote }}
+              namespace: {{ .ingress.middleware.namespace | quote }}
+          {{ else }}
+          middlewares: 
+            - name: {{ $.Values.defaults.ingress.middleware.name | quote }}
+              namespace: {{ $.Values.defaults.ingress.middleware.namespace | quote }}
+          {{ end }}
           cert:
-            {{ toYaml $.Values.cert | nindent 12 }}
-          recordTTL: {{ $.Values.defaults.backend.dns.ttl }}
-        # Parameters for the external server
+            reflectedSecret:
+              enabled: {{ $.Values.cert.reflectedSecret.enabled }}
+              originName: {{ $.Values.cert.reflectedSecret.originName | quote }}
+              originNamespace: {{ $.Values.cert.reflectedSecret.originNamespace | quote }}
+        dnsRecord:
+          enabled: false 
         externalServer:
           tls:
-            enabled: {{ .backend.tls.enabled | quote }}
-            skipVerify: {{ .backend.tls.skipVerify | default $.Values.defaults.backend.tls.skipVerify | quote }}
-          # IP address of the external server
+            enabled: {{ .backend.tls.enabled }}
+            skipVerify: {{ .backend.tls.skipVerify | default $.Values.defaults.backend.tls.skipVerify }}
           url: {{ .backend.url | quote }}
-          port: {{ .backend.port | quote }}
+          port: {{ .backend.port }}
           protocol: {{ .backend.protocol | default $.Values.defaults.backend.protocol | quote }}
   syncPolicy:
     automated:
