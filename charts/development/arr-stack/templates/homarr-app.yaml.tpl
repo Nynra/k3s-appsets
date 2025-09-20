@@ -20,9 +20,9 @@ spec:
     helm:
       valuesObject:
         quota:
-          enabled: {{ .Values.quota.enabled | quote }}
+          enabled: {{ .Values.quota.enabled }}
         networkPolicy:
-          enabled: {{ .Values.networkPolicy.enabled | quote }}
+          enabled: {{ .Values.networkPolicy.enabled }}
           ingress:
             traefikNamespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
             traefikPodSelector: {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 14 }}
@@ -33,17 +33,17 @@ spec:
               namespace: {{ .Values.homarr.middleware.namespace | quote }}
           cert:
             reflectedSecret:
-              enabled: {{ .Values.cert.reflectedSecret.enabled | quote }}
+              enabled: {{ .Values.cert.reflectedSecret.enabled }}
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
         oidcClient:
           reflectedSecret:
-            enabled: {{ .Values.homarr.oidcClient.reflectedSecret.enabled | quote }}
+            enabled: {{ .Values.homarr.oidcClient.reflectedSecret.enabled }}
             originNamespace: {{ .Values.homarr.oidcClient.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.oidcClient.reflectedSecret.originName | quote }}
         dbCredentials:
           reflectedSecret:
-            enabled: {{ .Values.homarr.dbCredentials.reflectedSecret.enabled | quote }}
+            enabled: {{ .Values.homarr.dbCredentials.reflectedSecret.enabled }}
             originNamespace: {{ .Values.homarr.dbCredentials.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.dbCredentials.reflectedSecret.originName | quote }}
         homarr:
