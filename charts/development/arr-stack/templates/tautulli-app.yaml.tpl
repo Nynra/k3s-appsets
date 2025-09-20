@@ -19,7 +19,6 @@ spec:
     path: charts/development/tautulli
     helm:
       valuesObject:
-        enabled: {{ .Values.tautulli.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}
         networkPolicy:
@@ -37,6 +36,8 @@ spec:
               enabled: {{ .Values.cert.reflectedSecret.enabled }}
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
+        tautulli:
+          enabled: {{ .Values.tautulli.enabled }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:

@@ -19,7 +19,6 @@ spec:
     path: charts/development/homarr
     helm:
       valuesObject:
-        enabled: {{ .Values.homarr.enabled | quote }}
         quota:
           enabled: {{ .Values.quota.enabled | quote }}
         networkPolicy:
@@ -47,6 +46,8 @@ spec:
             enabled: {{ .Values.homarr.dbCredentials.reflectedSecret.enabled | quote }}
             originNamespace: {{ .Values.homarr.dbCredentials.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.dbCredentials.reflectedSecret.originName | quote }}
+        homarr:
+          enabled: {{ .Values.homarr.enabled | quote }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:

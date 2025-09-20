@@ -19,7 +19,6 @@ spec:
     path: charts/development/jellyseerr
     helm:
       valuesObject:
-        enabled: {{ .Values.jellyseerr.enabled }}
         quota:
           enabled: {{ .Values.quota.enabled }}
         networkPolicy:
@@ -37,6 +36,8 @@ spec:
               enabled: {{ .Values.cert.reflectedSecret.enabled }}
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
+        jellyseerr:
+          enabled: {{ .Values.jellyseerr.enabled }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
