@@ -18,7 +18,7 @@ spec:
     targetRevision: HEAD
     path: charts/development/homarr
     helm:
-      values: |
+      values: |-
         enabled: {{ .Values.homarr.enabled | quote }}
         quota:
           enabled: {{ .Values.quota.enabled | quote }}
