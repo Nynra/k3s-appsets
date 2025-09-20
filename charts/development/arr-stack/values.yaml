@@ -24,6 +24,7 @@ cert:
 
 homarr: 
   enabled: true
+  enableDeps: true
   ingressUrl: homarr.example.com
   middleware:
     name: traefik-default-chain
@@ -43,6 +44,7 @@ homarr:
 
 prowlarr:
   enabled: true
+  enableDeps: true
   ingressUrl: prowlarr.example.com
   middleware:
     name: traefik-default-chain
@@ -50,6 +52,7 @@ prowlarr:
 
 tautulli:
   enabled: true
+  enableDeps: true
   ingressUrl: tautulli.example.com
   middleware:
     name: traefik-default-chain
@@ -57,6 +60,7 @@ tautulli:
 
 jellyseerr:
   enabled: true
+  enableDeps: true
   ingressUrl: jellyseerr.example.com
   middleware:
     name: traefik-default-chain

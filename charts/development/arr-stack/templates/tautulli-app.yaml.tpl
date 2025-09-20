@@ -1,4 +1,4 @@
-{{ if .Values.enabled }}
+{{ if .Values.enabled }}{{ if .Values.tautulli.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -37,7 +37,7 @@ spec:
               originNamespace: {{ .Values.cert.reflectedSecret.originNamespace | quote }}
               originName: {{ .Values.cert.reflectedSecret.originName | quote }}
         tautulli:
-          enabled: {{ .Values.tautulli.enabled }}
+          enabled: {{ .Values.tautulli.enableDeps }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
@@ -46,4 +46,4 @@ spec:
     {{ end }}
     syncOptions:
       - CreateNamespace=false
-{{ end }}
+{{ end }}{{ end }}

@@ -1,4 +1,4 @@
-{{ if .Values.enabled }}
+{{ if .Values.enabled }}{{ if .Values.homarr.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -47,7 +47,7 @@ spec:
             originNamespace: {{ .Values.homarr.dbCredentials.reflectedSecret.originNamespace | quote }}
             originName: {{ .Values.homarr.dbCredentials.reflectedSecret.originName | quote }}
         homarr:
-          enabled: {{ .Values.homarr.enabled }}
+          enabled: {{ .Values.homarr.enableDeps }}
   syncPolicy:
     {{ if .Values.argoCD.autosync }}
     automated:
@@ -56,4 +56,4 @@ spec:
     {{ end }}
     syncOptions:
       - CreateNamespace=false
-{{ end }}
+{{ end }}{{ end }}
