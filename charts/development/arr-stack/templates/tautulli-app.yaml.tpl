@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://github.com/Nynra/k3s-charts
     targetRevision: HEAD
-    path: charts/development/tautulli
+    path: charts/incubating/tautulli
     helm:
       valuesObject:
         quota:

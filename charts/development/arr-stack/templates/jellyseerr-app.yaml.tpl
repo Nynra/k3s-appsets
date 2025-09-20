@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://github.com/Nynra/k3s-charts
     targetRevision: HEAD
-    path: charts/development/jellyseerr
+    path: charts/incubating/jellyseerr
     helm:
       valuesObject:
         quota:
