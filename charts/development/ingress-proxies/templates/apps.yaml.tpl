@@ -29,7 +29,7 @@ spec:
           enabled: {{ .ingress.enabled | default true }}
           url: {{ .ingress.url | quote }}
           entrypoint: {{ .ingress.entrypoint | default $.Values.defaults.ingress.entrypoint | quote }}
-          {{ if .middleware }}
+          {{ if .ingress.middleware }}
           middlewares: 
             - name: {{ .ingress.middleware.name | quote }}
               namespace: {{ .ingress.middleware.namespace | quote }}

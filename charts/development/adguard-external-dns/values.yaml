@@ -1,0 +1,28 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+
+argocd: 
+  # Namespace argocd is deployed in
+  namespace: argocd
+  server: https://kubernetes.default.svc
+  # The project the proxies will be deployed in
+  project: ingress-proxies
+
+networkPolicy:
+  enabled: false
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
+cert:
+  # The certificate to use for the ingresses
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originName: example-com-tls
