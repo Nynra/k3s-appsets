@@ -1,9 +1,9 @@
-{{- if .Values.enabled }}{{- if .Values.quota.enabled }}
-kind: ResourceQuota
+{{- if .Values.enabled }}{{- if .Values.limits.enabled }}
 apiVersion: v1
+kind: LimitRange
 metadata:
-  name: "{{ .Values.tenantProject.name }}-quotas"
-  namespace: {{ .Release.Namespace | quote }}
+  name: cpu-resource-constraint
+  namespace: {{ .Release.Namespace }}-resources
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     {{- if .Values.global.commonAnnotations }}
@@ -16,6 +16,6 @@ metadata:
     # Global labels
     {{- toYaml .Values.global.commonLabels | nindent 4 }}
     {{- end }}
-spec: 
-  {{- .Values.quota.rules | nindent 2 }}
+spec:
+  {{- toYaml .Values.limits.rules | nindent 2 }}
 {{- end }}{{- end }}

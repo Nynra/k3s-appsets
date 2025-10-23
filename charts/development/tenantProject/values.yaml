@@ -7,49 +7,32 @@ global:
 
 # If the chart instance should be created
 enabled: true
-
-managementProject:
-  name: k3s-test-management
-  namespace: argocd
+managementProjectName: k3s-management-project
 
 # Argocd App Projects
 tenantProject:
   # Project the tenant resources will be deployed in
-  enabled: false
-  name: k3s-test-project
-  description: "Tenant project for k3s test"
-
-  # Add a presync hook to the project
-  hookProject: false
-  hookNamespace: false
+  name: k3s-tenant-test-project
+  destinationServer: https://kubernetes.default.svc
 
   # List of source repositories for this project
-  sourceRepos: []
-    # Or allow all repositories
-    # - "*"
-    # # Argocd Helm chart repository
-    # - https://argoproj.github.io/argo-helm
-
-  # List of allowed project destinations. The deployment is restricted 
-  # to the tenant namespace so only the server can be specified.
-  destinationServer: https://kubernetes.default.svc
+  sourceRepos:
+    - "*"
+  namespaces:
+  # It is not recommended to allow all namespaces, specify only the needed ones
+    - "test-namespace"
 
   # List of cluster resource whitelists for this project
   # By default allows no cluster scoped resources
   clusterResourceWhitelist: []
-  # Or allow all cluster resources
-  #   - group: "*"
-  #     kind: "*"
+    # - group: "*"
+    #   kind: "*"
 
-  # List of namespace resource blacklists for this project
-  namespaceResourceBlacklist: []
+  # List of namespace resource whitelists for this project
+  namespaceResourceWhitelist: []
     # - group: "" 
     #   kind: Namespace
 
-  # Deny all namespaced-scoped resources from being created, except for Deployment and StatefulSet
-  namespaceResourceWhitelist: []
-
-  enableReadOnlyRole: false
   roles: {}
     # A role which provides read-only access to all applications in the project
     # - name: read-only
@@ -74,71 +57,77 @@ tenantProject:
   #   applications:
   #     - '*-prod'
 
-# limits:
-#   enabled: true
-#   # Specification of the limitRange resource
-#   rules: |
-#     limits:
-#       - type: "Pod"
-#         max:
-#           cpu: 200m
-#           memory: 256Mi
-#       - type: "Container"
-#         max:
-#           cpu: 100m
-#           memory: 128Mi
+limits:
+  enabled: true
+  # Specification of the limitRange resource
+  # This is per pod and per container, for overall limits use quota
+  rules: |
+    limits:
+      - type: "Pod"
+        max:
+          cpu: 200m
+          memory: 256Mi
+      - type: "Container"
+        max:
+          cpu: 100m
+          memory: 128Mi
 
 quota:
-  enabled: false
+  enabled: true
   # Specification of the quotas resource
   rules: |
     hard:
-      limits.cpu: "400m"
-      limits.memory: "1024Mi"
-      requests.cpu: "400m"
-      requests.memory: "512Mi"
+      limits.cpu: "2000m"
+      limits.memory: "8192Mi"
+      # requests.cpu: "400m"
+      # requests.memory: "512Mi"
       persistentvolumeclaims: "0"
+      # longhorn.storageclass.storage.k8s.io/requests.storage: "1Gi"
       # pods: "4"
       # services: "2"
 
-networkPolicy:
-  enabled: false
-  # Isolate the tenant namespace from the rest of the cluster
-  isolateTenant: 
-    enabled: true
-    ingress:
-      allow: true
-      serviceName: traefik
-    monitoring:
-      allow: true
-      namespace: monitoring
+# networkPolicy:
+#   enabled: false
+#   # Isolate the tenant namespace from the rest of the cluster
+#   isolateTenant: 
+#     enabled: true
+#     ingress:
+#       allow: true
+#       serviceName: traefik
+#     monitoring:
+#       allow: true
+#       namespace: monitoring
 
-  additionalRules:
-  # allow from external
-  - id: allow-from-openshift-ingress
-    # Specifications of this policy rule
-    spec: |
-      ingress:
-      - from:
-          - namespaceSelector:
-              matchLabels:
-                network.openshift.io/policy-group: ingress
-      podSelector: {}
-      policyTypes:
-      - Ingress
-  # # allow from internal
-  - id: allow-from-same-namespace
-    # Specifications of this policy rule
-    spec: |
-      podSelector: {}
-      ingress:
-      - from:
-        - podSelector: {}
+#   additionalRules:
+#   # allow from external
+#   - id: allow-from-openshift-ingress
+#     # Specifications of this policy rule
+#     spec: |
+#       ingress:
+#       - from:
+#           - namespaceSelector:
+#               matchLabels:
+#                 network.openshift.io/policy-group: ingress
+#       podSelector: {}
+#       policyTypes:
+#       - Ingress
+#   # # allow from internal
+#   - id: allow-from-same-namespace
+#     # Specifications of this policy rule
+#     spec: |
+#       podSelector: {}
+#       ingress:
+#       - from:
+#         - podSelector: {}
 
 gitopsApplication:
-  enabled: false
+  enabled: true
   # Dont forget to add the gitops url to the allowed sources for the tenant project
-  # is not all sources are allowed
-  repoURL: "" 
+  repoURL: "https://github.com/my-org/my-repo.git"
   targetRevision: HEAD
   path: applications
+
+  syncPolicy:
+    enabled: true
+    prune: true
+    selfHeal: true

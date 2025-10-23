@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: "{{ .Values.tenantProject.name }}-gitops-orchestrator"
-  namespace: {{ .Values.managementProject.namespace | quote }}
+  namespace: {{ .Release.Namespace }}-applications
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
@@ -19,18 +19,20 @@ metadata:
     {{- toYaml .Values.global.commonLabels | nindent 4 }}
     {{- end }}
 spec:
-  project: {{ .Values.managementProject.name | quote }}
+  project: {{ .Values.managementProjectName | quote }}
   destination:
     server: {{ .Values.tenantProject.destinationServer | quote }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ .Release.Namespace }}-applications
   source:
     repoURL: {{ .Values.gitopsApplication.repoURL | quote }}
     targetRevision: {{ .Values.gitopsApplication.targetRevision | quote }}
     path: {{ .Values.gitopsApplication.path | quote }}
   syncPolicy:
+    {{- if .Values.gitopsApplication.syncPolicy.enabled }}
     automated:
-      prune: true
-      selfHeal: true
+      prune: {{ .Values.gitopsApplication.syncPolicy.prune }}
+      selfHeal: {{ .Values.gitopsApplication.syncPolicy.selfHeal }}
+    {{- end }}
     syncOptions:
       - CreateNamespace=false
 {{- end }}{{- end }}

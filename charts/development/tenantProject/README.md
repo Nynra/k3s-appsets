@@ -2,6 +2,12 @@
 
 This chart is a simple tool to create and manage tenant projects in a k3s-cluster. Each tentant project is linked to an argoCD project and can contain multiple namespaces. The goal is to provide a tenant environment that is isolated from other tenants, while still allowing for shared resources like ingress and monitoring.
 
+The chart provides:
+
+- gitops application so the tenant can manage their own resources via gitops
+- argocd project to limit the tenant's application deployment to only their own namespaces and limit access to other resources
+- resource quotas and limit ranges to control resource usage in the tenant namespaces
+
 ## Features
 
 ### Implemented
