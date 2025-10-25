@@ -3,7 +3,7 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: {{ .Release.Namespace }}-applications
+  name: {{ .Release.Name }}-applications
   annotations:
     argocd.argoproj.io/sync-wave: "-10"
     {{- if .Values.global.commonAnnotations }}

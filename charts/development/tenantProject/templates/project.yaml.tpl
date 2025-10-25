@@ -23,10 +23,10 @@ spec:
     - {{ . | quote }}
     {{- end }}
   destinations:
-    {{- range .Values.tenantProject.namespaces }}
-    - namespace: {{ . | quote }}
-      server: {{ $.Values.tenantProject.destinationServer | quote }}
-    {{- end }}
+    - namespace: {{ .Release.Name }}-applications
+      server: {{ .Values.tenantProject.destinationServer | quote }}
+    - namespace: {{ .Release.Name }}-resources
+      server: {{ .Values.tenantProject.destinationServer | quote }}
   {{ if not (empty .Values.tenantProject.clusterResourceWhitelist) }}
   clusterResourceWhitelist:
     {{- range .Values.tenantProject.clusterResourceWhitelist }}

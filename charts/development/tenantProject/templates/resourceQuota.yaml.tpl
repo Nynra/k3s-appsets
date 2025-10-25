@@ -3,7 +3,7 @@ kind: ResourceQuota
 apiVersion: v1
 metadata:
   name: "{{ .Values.tenantProject.name }}-quotas"
-  namespace: {{ .Release.Namespace }}-resources
+  namespace: {{ .Release.Name }}-resources
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     {{- if .Values.global.commonAnnotations }}

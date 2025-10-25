@@ -3,7 +3,7 @@ apiVersion: v1
 kind: LimitRange
 metadata:
   name: cpu-resource-constraint
-  namespace: {{ .Release.Namespace }}-resources
+  namespace: {{ .Release.Name }}-resources
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     {{- if .Values.global.commonAnnotations }}
